@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nginx Upstream Viewer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Nginx Upstream Viewer</h1>
+    <p class="subtitle">
+      Список хостов для веб-сервера и их upstream из конфигов Nginx.
+    </p>
+
+    <div class="controls">
+      <input
+        id="filterInput"
+        class="filter-input"
+        type="text"
+        placeholder="Фильтр по хосту или upstream"
+        autocomplete="off"
+      />
+      <button id="reloadBtn" type="button">Обновить список</button>
+    </div>
+
+    <section id="resultSection" class="hidden">
+      <h2>Хосты и их upstream</h2>
+      <div id="hostsList" class="hosts-list"></div>
+    </section>
+
+    <p id="message" class="message"></p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
