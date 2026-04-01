@@ -13,10 +13,10 @@ loadHosts();
 async function loadHosts() {
   hostsList.innerHTML = "";
   resultSection.classList.add("hidden");
-  message.textContent = "Загружаю конфиги Nginx...";
+  message.textContent = "Загружаю данные...";
 
   try {
-    const response = await fetch("/api/hosts");
+    const response = await fetch("/data/hosts.json", { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
@@ -39,7 +39,7 @@ async function loadHosts() {
     const filesCount = Number.isInteger(payload.configFilesCount) ? payload.configFilesCount : "?";
     message.textContent = `Хостов: ${hosts.length}, с upstream: ${hostsWithUpstreams}, файлов: ${filesCount}. Источник: ${sourceText}`;
   } catch (error) {
-    message.textContent = `Ошибка загрузки: ${error.message}. Запустите server.py и откройте http://localhost:8000`;
+    message.textContent = `Ошибка загрузки: ${error.message}. Проверьте, что /var/www/upstream-viewer/data/hosts.json создан скриптом из /opt`;
   }
 }
 
