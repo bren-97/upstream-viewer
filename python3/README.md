@@ -21,25 +21,36 @@ sudo chmod +x /opt/upstream-viewer/update_upstreams.py
 
 ## Nginx конфиг
 
-Файл: `/etc/nginx/conf.d/upstream-viewer.example.com.conf`
+Файл, например: `/etc/nginx/conf.d/upstream-viewer.conf`
 
 ```nginx
 server {
-    listen 80;
-    server_name upstream-viewer.example.com;
+    listen 127.0.0.1:80;
+    server_name localhost;
 
-    root /var/www/upstream-viewer;
-    index index.html;
+    access_log /var/log/nginx/upstream-viewer.access.log;
+    error_log  /var/log/nginx/upstream-viewer.error.log;
 
-    location / {
-        try_files $uri $uri/ /index.html;
+    location = /upstream-viewer {
+        return 301 /upstream-viewer/;
     }
 
-    location /data/ {
-        add_header Cache-Control "no-store";
+    location /upstream-viewer/ {
+        alias /var/www/upstream-viewer/;
+        index index.html;
+
+        allow 127.0.0.1;
+        allow 172.27.0.0/16;
+        deny all;
+    }
+
+    location / {
+        return 404;
     }
 }
 ```
+
+После деплоя страница доступна по адресу `http://127.0.0.1/upstream-viewer/` (JSON: `/upstream-viewer/data/hosts.json`).
 
 ```bash
 sudo nginx -t
