@@ -199,11 +199,28 @@ def ensure_parent(path):
         os.makedirs(parent)
 
 
+def _json_safe_unicode(obj):
+    """Python 2: json.dumps fails on mixed str (utf-8 bytes) and unicode."""
+    if isinstance(obj, unicode):
+        return obj
+    if isinstance(obj, str):
+        return obj.decode("utf-8", "replace")
+    if isinstance(obj, list):
+        return [_json_safe_unicode(x) for x in obj]
+    if isinstance(obj, dict):
+        return dict(
+            (_json_safe_unicode(k), _json_safe_unicode(v))
+            for k, v in obj.iteritems()
+        )
+    return obj
+
+
 def dump_json_snapshot(target_path, config_dirs):
-    payload = build_payload(config_dirs)
+    print("Scanning: %s" % ", ".join(config_dirs))
+    payload = _json_safe_unicode(build_payload(config_dirs))
     ensure_parent(target_path)
     with io.open(target_path, "w", encoding="utf-8") as handle:
-        handle.write(unicode(json.dumps(payload, ensure_ascii=False, indent=2)))
+        handle.write(json.dumps(payload, ensure_ascii=False, indent=2))
     print("Snapshot written to: %s" % target_path)
 
 

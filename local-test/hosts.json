@@ -1,0 +1,65 @@
+{
+  "hosts": [
+    {
+      "host": "test-localhost-1.internal",
+      "hostNames": [
+        "test-localhost-1.internal"
+      ],
+      "serverBlocksCount": 1,
+      "upstreams": [
+        {
+          "name": "test_localhost_1",
+          "servers": [
+            "127.0.0.1:9001",
+            "127.0.0.1:9002 backup"
+          ],
+          "source": "proxy_pass http://test_localhost_1"
+        }
+      ],
+      "confFile": "test_localhost_1-upstream.conf",
+      "serverBlockIndex": 1
+    },
+    {
+      "host": "test-localhost-2.internal",
+      "hostNames": [
+        "test-localhost-2.internal"
+      ],
+      "serverBlocksCount": 1,
+      "upstreams": [
+        {
+          "name": "test_localhost_2",
+          "servers": [
+            "127.0.0.1:9010 weight=3",
+            "127.0.0.1:9011"
+          ],
+          "source": "proxy_pass http://test_localhost_2"
+        }
+      ],
+      "confFile": "test_localhost_2-upstream.conf",
+      "serverBlockIndex": 1
+    },
+    {
+      "host": "test-localhost-3.internal",
+      "hostNames": [
+        "test-localhost-3.internal"
+      ],
+      "serverBlocksCount": 1,
+      "upstreams": [
+        {
+          "name": "test_localhost_3",
+          "servers": [
+            "unix:/tmp/test_localhost_3.sock",
+            "127.0.0.1:9020 max_fails=3 fail_timeout=30s"
+          ],
+          "source": "proxy_pass http://test_localhost_3"
+        }
+      ],
+      "confFile": "test_localhost_3-upstream.conf",
+      "serverBlockIndex": 1
+    }
+  ],
+  "configDirs": [
+    "/home/bren/upstream-viewer/upstream-viewer-1/local-test/nginx/conf.d"
+  ],
+  "configFilesCount": 3
+}

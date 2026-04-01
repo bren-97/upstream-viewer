@@ -198,6 +198,7 @@ def ensure_parent(path):
 
 
 def dump_json_snapshot(target_path, config_dirs):
+    print("Scanning: %s" % ", ".join(config_dirs))
     payload = build_payload(config_dirs)
     ensure_parent(target_path)
     with io.open(target_path, "w", encoding="utf-8") as handle:
